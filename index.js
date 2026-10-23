@@ -87,10 +87,36 @@ let slideInterval = null;
 
 function initHeroBannerSlider() {
   const track = document.getElementById('hero-slider-track');
-  if (!track) return;
+  const slider = document.getElementById('hero-slider');
+  if (!track || !slider) return;
   const totalSlides = track.children.length;
   if (totalSlides > 1) {
     startAutoSlide(totalSlides);
+  }
+
+  // Mobile Touch Swipe Handlers (Zero Lag)
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  slider.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    if (slideInterval) clearInterval(slideInterval);
+  }, { passive: true });
+
+  slider.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe(totalSlides);
+  }, { passive: true });
+
+  function handleSwipe(total) {
+    const threshold = 50; // minimum distance for swipe
+    if (touchEndX < touchStartX - threshold) {
+      // Swiped Left -> Next Slide
+      setSlide(currentSlideIndex + 1);
+    } else if (touchEndX > touchStartX + threshold) {
+      // Swiped Right -> Previous Slide
+      setSlide(currentSlideIndex - 1);
+    }
   }
 }
 
@@ -292,9 +318,43 @@ let currentAboutSlide = 0;
 function initAboutCarousel() {
   const prevBtn = document.getElementById('about-prev');
   const nextBtn = document.getElementById('about-next');
+  const carousel = document.querySelector('.about-carousel');
 
-  if (prevBtn) prevBtn.addEventListener('click', () => changeAboutSlide(-1));
-  if (nextBtn) nextBtn.addEventListener('click', () => changeAboutSlide(1));
+  if (prevBtn) {
+    prevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      changeAboutSlide(-1);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      changeAboutSlide(1);
+    });
+  }
+
+  // Mobile Touch Swipe Listener
+  if (carousel) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carousel.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const threshold = 40;
+      if (touchEndX < touchStartX - threshold) {
+        changeAboutSlide(1); // Swipe Left -> Next
+      } else if (touchEndX > touchStartX + threshold) {
+        changeAboutSlide(-1); // Swipe Right -> Prev
+      }
+    }, { passive: true });
+  }
 }
 
 function changeAboutSlide(direction) {
