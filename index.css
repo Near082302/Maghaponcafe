@@ -556,17 +556,6 @@ body {
   color: var(--text-dark);
 }
 
-.btn-foodpanda {
-  background-color: #d70f64 !important;
-  color: #ffffff !important;
-  border: none !important;
-}
-
-.btn-foodpanda:hover {
-  background-color: #b50b52 !important;
-  color: #ffffff !important;
-}
-
 .social-buttons-container {
   display: flex;
   gap: 14px;
@@ -1177,6 +1166,32 @@ body {
   opacity: 0.85;
 }
 
+/* DIRECT ORDER BUTTON STYLES */
+.btn-direct-order {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--secondary) !important;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(185, 52, 11, 0.25);
+  transition: var(--transition-smooth);
+}
+
+.btn-direct-order:hover {
+  background-color: var(--secondary) !important;
+  color: var(--text-dark) !important;
+  border-color: var(--primary) !important;
+  transform: translateY(-2px);
+}
+
+.step-card.direct-order-step {
+  border-top: 5px solid var(--primary) !important;
+}
+
+.step-card.direct-order-step .step-number {
+  background: var(--primary) !important;
+  color: #ffffff !important;
+}
+
 .about-btn {
   position: absolute;
   top: 50%;
@@ -1576,15 +1591,6 @@ body {
   background: var(--card-bg-hover);
   transform: translateY(-4px);
   box-shadow: var(--card-shadow-hover);
-}
-
-.step-card.foodpanda-step {
-  border-top: 5px solid #d70f64 !important;
-}
-
-.step-card.foodpanda-step .step-number {
-  background: #d70f64 !important;
-  color: #ffffff !important;
 }
 
 .step-number {

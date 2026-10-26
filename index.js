@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAboutStatsCounter();
   initPromoForm();
   initPrivacyModal();
-  initScrollReveals(); // <-- Add this line
+  initScrollReveals();
 });
 
 /* ===========================================================================
@@ -94,7 +94,6 @@ function initHeroBannerSlider() {
     startAutoSlide(totalSlides);
   }
 
-  // Mobile Touch Swipe Handlers (Zero Lag)
   let touchStartX = 0;
   let touchEndX = 0;
 
@@ -109,12 +108,10 @@ function initHeroBannerSlider() {
   }, { passive: true });
 
   function handleSwipe(total) {
-    const threshold = 50; // minimum distance for swipe
+    const threshold = 50;
     if (touchEndX < touchStartX - threshold) {
-      // Swiped Left -> Next Slide
       setSlide(currentSlideIndex + 1);
     } else if (touchEndX > touchStartX + threshold) {
-      // Swiped Right -> Previous Slide
       setSlide(currentSlideIndex - 1);
     }
   }
@@ -202,13 +199,7 @@ function filterStaticCards(searchQuery, category) {
 
     if (!matchesCategory) {
       const cleanFilter = category.toLowerCase().replace(/-/g, ' ');
-      if (cleanFilter === 'iced coffee') {
-        matchesCategory = cardCategory.includes('iced');
-      } else if (cleanFilter === 'hot coffee') {
-        matchesCategory = cardCategory.includes('hot');
-      } else {
-        matchesCategory = cardCategory.includes(cleanFilter);
-      }
+      matchesCategory = cardCategory.includes(cleanFilter);
     }
 
     if (matchesSearch && matchesCategory) {
@@ -232,12 +223,10 @@ function initItemDetailModal() {
   if (closeActionBtn) closeActionBtn.addEventListener('click', closeItemDetailModal);
 
   if (grabBtn) {
-    grabBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      closeItemDetailModal();
-      const grabSection = document.getElementById('grab');
-      if (grabSection) grabSection.scrollIntoView({ behavior: 'smooth' });
-    });
+    grabBtn.innerHTML = '<i class="fa-brands fa-facebook-messenger"></i> Message to Order';
+    grabBtn.className = 'btn btn-direct-order';
+    grabBtn.href = 'https://m.me/maghaponcafe/';
+    grabBtn.target = '_blank';
   }
 
   if (modal) {
@@ -305,6 +294,7 @@ function openStaticItemModal(item) {
 
   modal.classList.remove('hide');
 }
+
 function closeItemDetailModal() {
   const modal = document.getElementById('item-detail-modal');
   if (modal) modal.classList.add('hide');
@@ -336,7 +326,6 @@ function initAboutCarousel() {
     });
   }
 
-  // Mobile Touch Swipe Listener
   if (carousel) {
     let touchStartX = 0;
     let touchEndX = 0;
@@ -349,9 +338,9 @@ function initAboutCarousel() {
       touchEndX = e.changedTouches[0].screenX;
       const threshold = 40;
       if (touchEndX < touchStartX - threshold) {
-        changeAboutSlide(1); // Swipe Left -> Next
+        changeAboutSlide(1);
       } else if (touchEndX > touchStartX + threshold) {
-        changeAboutSlide(-1); // Swipe Right -> Prev
+        changeAboutSlide(-1);
       }
     }, { passive: true });
   }
@@ -391,7 +380,6 @@ function initAboutStatsCounter() {
       if (entry.isIntersecting && !animated) {
         animated = true;
         stats.forEach(stat => {
-          // Reads data-target first, or extracts numbers directly from textContent
           const target = parseInt(stat.getAttribute('data-target') || stat.textContent.replace(/\D/g, '') || '0', 10);
           if (target <= 0) return;
 
@@ -482,7 +470,7 @@ function initPrivacyModal() {
 }
 
 /* ===========================================================================
-   9. SCROLL REVEAL OBSERVER (Zero Lag, GPU-Accelerated)
+   9. SCROLL REVEAL OBSERVER
    =========================================================================== */
 function initScrollReveals() {
   const elementsToReveal = document.querySelectorAll('.card, .stat-card, .value-card, .social-card, .step-card, .review-card, .announcement-card-split');
@@ -493,7 +481,7 @@ function initScrollReveals() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        obs.unobserve(entry.target); // Stops observing once revealed to save browser memory
+        obs.unobserve(entry.target);
       }
     });
   }, { threshold: 0.12 });
